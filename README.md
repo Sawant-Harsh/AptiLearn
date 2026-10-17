@@ -1,103 +1,41 @@
-<<<<<<< HEAD
-# AptiLearn (MERN)
+# AptiLearn — Full-Stack Learning Platform
 
-Adaptive learning and diagnostics platform: **React 18 + Vite + Tailwind** front end, **Node/Express** API,
-**MongoDB** (or a zero-setup JSON file), **Socket.IO** real-time sync, **real AI** (Anthropic Claude),
-**Google sign-in**, and **YouTube** lesson videos.
+AptiLearn is a modern, feature-rich full-stack web application designed for interactive student learning, progress tracking, and dynamic video integration, powered by a robust Node.js/Express backend, MongoDB database, and a React/Vite frontend.
 
-Two actors only: **Student** and **Admin**.
+---
 
-## Quick start
+## 🚀 Key Features
 
-```bash
-npm run setup          # installs server + client dependencies (Node 18+)
-npm start              # builds the client and serves everything on http://localhost:5000
-# or, for development with hot reload (client :3000, API :5000):
-npm run dev
-```
+* **Secure Authentication:** Integrated Google OAuth (Sign-In) alongside traditional admin/student login capabilities.
+* **Dynamic Video Lessons:** Seamlessly integrates the YouTube Data API v3 to fetch and stream real-time educational lesson videos directly into the platform.
+* **Interactive AI Assistant (AptiBot):** Built-in floating AI assistant support for real-time student Q&A and guidance.
+* **Admin AI Question Builder:** Automated quiz and question generation tools designed for instructors and administrators.
+* **Progress Tracking & Rankings:** Real-time streak tracking, user rankings, course completion management, and diagnostic quizzes.
+* **Database Storage:** Powered by MongoDB for reliable, cloud-ready data persistence.
 
-It runs immediately with no configuration: data is stored in `server/data/db.json`.
-To switch on the real integrations, copy `server/.env.example` to `server/.env` and fill in the keys below.
+---
 
-### Admin login (the only admin)
+## 🛠️ Tech Stack
 
-| Email | Password |
-|-------|----------|
-| `admin@gmail.com` | `admin123` |
+* **Frontend:** React, Vite, Tailwind CSS, Lucide Icons
+* **Backend:** Node.js, Express.js
+* **Database:** MongoDB / MongoDB Atlas
+* **APIs & Auth:** YouTube Data API v3, Google OAuth Client ID, Anthropic API
 
-Not shown anywhere in the UI. Any other email/password on the Admin tab is rejected. Change it with
-`ADMIN_EMAIL` / `ADMIN_PASSWORD` in `server/.env`.
+---
 
-## Turning on the real integrations (`server/.env`)
+## 📂 Project Structure
 
-| Feature | Variable(s) | How |
-|---|---|---|
-| **AI assistant + AI question builder** | `ANTHROPIC_API_KEY` (optional `ANTHROPIC_MODEL`) | Key from console.anthropic.com. AptiBot answers anything; admin "Generate questions" writes real MCQs into the bank. Without a key both show a clear "AI is not configured" message. |
-| **Google sign-in (account chooser)** | `GOOGLE_CLIENT_ID` | Google Cloud Console > APIs & Services > Credentials > OAuth client ID (Web). Add `http://localhost:5000` and `http://localhost:3000` as *Authorised JavaScript origins*. The server verifies the Google ID token. Students only. |
-| **YouTube video per lesson** | `YOUTUBE_API_KEY` | Free YouTube Data API v3 key. For every lesson the server finds a real, embeddable video for that exact topic, caches it, and the player changes when you change lesson. Without a key, Python uses a verified freeCodeCamp video and other lessons show a "Search on YouTube" card. |
-| **MongoDB** | `MONGODB_URI` (and `MONGODB_DB`) | e.g. `mongodb://127.0.0.1:27017` or an Atlas `mongodb+srv://` URI. Empty = JSON file. |
-
-Also set `JWT_SECRET` to a long random string for any real deployment.
-
-## What is where
-
-**Student portal**
-- Landing page (no AI chat for guests): course catalog with images, categories and search, selected-course panel, FAQ, footer.
-- Sign in / create account with full validation (unknown email, wrong password, duplicate email). Fields start empty.
-  Progress is saved per account, so logging out and back in restores everything. New accounts start at zero (streak 1).
-- Choosing a course before login: you land on that course's Learning hub after signing in. No choice: you land on Courses.
-- **Learning hub**: streak, live rank + XP, course completion, real YouTube lesson video, syllabus that ticks off as you finish, PDF notes (counts as reading), "Take a quick test" (topics + difficulty), FAQ, reviews.
-- **Courses**: all courses; enrolled ones first with live completion; start any new course with its own diagnostic.
-- **My progress**: every enrolled course with live completion, strong/weak topics, recommended lessons and videos for weak topics, quick test.
-- **Rankings**: Indian-named student leaderboard including you, updating live.
-- Account menu: My progress, My profile (edit/clear details, change password, delete account), Rankings, Log out. Notification bell receives admin messages instantly.
-- **AptiBot** (floating, every signed-in page except during a diagnostic): real AI, any question.
-
-**Admin portal** (Overview / Students / Question bank / Reports + profile drawer with Log out)
-- Overview: one card per course. Click to open that course's page: metrics, diagnostic gradebook (search, status filter, at-risk filter, CSV export, per-student view, **send support message** straight to the student's notifications) and the **AI based question builder**.
-- **Create New Course** (on every admin page): the course appears for all students immediately.
-- Students page, Question bank (all questions incl. AI ones, live/hidden toggle; separate "Add to question bank" form, display only), Reports.
-- All admin <-> student changes sync in real time over Socket.IO.
-
-**XP / ranking**: diagnostic score + 20 per completed lesson + 5 per lesson notes read + 2 per correct quick-test answer.
-
-## Layout
-
-```
-client/   React app (pages, components, context, real-time hooks)
-server/   Express API, Socket.IO, DB adapter (JSON file or MongoDB), AI + YouTube services, seed data
-server/src/selftest.js   `npm test`: 36 end-to-end API checks
-```
-=======
-# AptiLearn — AI-Driven Adaptive Learning Platform
-
-AptiLearn is an intelligent, full-stack adaptive learning and diagnostic platform designed to evaluate student proficiency in real-time, bridge knowledge gaps through personalized study paths, and provide instructors with robust classroom analytics.
-
-## Key Features
-
-### 1. Dual Portal Architecture
-* **Student Hub:** Personalized learning workspace featuring interactive content modules, targeted practice drills, and progress profiles.
-* **Teacher Hub:** Instructor management dashboard featuring class-wide metrics, diagnostic gradebooks, and content management tools.
-
-### 2. Adaptive Diagnostic Assessment Engine
-* **Dynamic Testing:** Real-time diagnostic evaluation across technical and quantitative subjects where question difficulty scales based on student responses.
-* **Instant Performance Analytics:** Comprehensive post-test breakdown displaying overall accuracy scores, topic-by-topic proficiency levels, and automated learning recommendations.
-
-### 3. Comprehensive Student Learning Hub
-* **Interactive Lecture Player:** Dedicated video lecture integration paired with expandable syllabus module navigation.
-* **Downloadable Resources:** Easily accessible lecture notes, summary sheets, and practice problem sets.
-* **Adaptive MCQ Generator:** Custom practice question builder that targets individual weak spots identified during diagnostic tests.
-* **AI Study Assistant:** Integrated floating chatbot widget providing real-time support, instant concept explanations, and doubt resolution.
-* **Student Profile:** Dedicated profile management for tracking skill rank, learning streaks, and personal account details.
-
-### 4. Instructor Management & Analytics Hub
-* **Class Performance Insights:** High-level metrics tracking total enrollment, class average scores, and automated flags for struggling or at-risk students.
-* **Custom Diagnostic Question Builder:** Form-based tools allowing educators to draft test questions, set difficulty weightings, and define passing thresholds.
-* **Gradebook & Submissions:** Tabular performance manager for reviewing auto-graded quizzes, assigning manual grades, and leaving inline student feedback.
-* **Video & Content Management:** Streamlined upload interface for lectures, assignments, and curriculum modules.
-
-## Technology Stack
-* **Frontend:** React.js / Modern Component Architecture
-* **Backend:** Node.js, Express.js (MERN Stack)
-* **Database:** MongoDB
->>>>>>> b68206169b68b54ba20b88ed1b2cf9a9661650da
+```text
+aptilearn/
+├── client/                 # React + Vite frontend application
+│   ├── src/
+│   │   ├── components/     # UI components (VideoPlayer, AptiBot, etc.)
+│   │   ├── pages/          # Dashboard, Admin portal, and course views
+│   │   └── ...
+├── server/                 # Node.js + Express backend server
+│   ├── src/
+│   │   ├── routes/         # API routes (auth, courses, youtube, ai)
+│   │   ├── models/         # MongoDB schemas and models
+│   │   └── ...
+└── package.json            # Root configuration and workspaces
