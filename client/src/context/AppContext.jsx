@@ -67,7 +67,13 @@ export function AppProvider({ children }) {
   const role = user?.role;
   useEffect(() => {
     if (!user) return undefined;
-    const s = io({ auth: { token: getToken() }, transports: ['websocket', 'polling'] });
+    
+    // Connect to live Render backend via environment variable, falling back to window origin locally
+    const s = io(import.meta.env.VITE_API_URL || undefined, {
+      auth: { token: getToken() },
+      transports: ['websocket', 'polling']
+    });
+    
     socketRef.current = s;
     s.on('notification', (n) => { toast(n.title ? `${n.title}: ${n.body}` : n.body); refreshMe().catch(() => {}); });
     s.on('me:update', () => refreshMe().catch(() => {}));
